@@ -7,6 +7,8 @@ const cors = require("cors");
 const connectDB = require("./config/mongoDB");
 const logger = require("./middlewares/logger");
 const upload = require("./middlewares/upload");
+
+const cloudinary = require("./utils/cloudinary");
 const error = require("./middlewares/err");
 
 const userRoutes = require("./Routes/userRoutes");
@@ -31,9 +33,21 @@ app.get("/", async (req, res) => {
 
 app.post("/upload", upload.single("image"), (req, res) => {
   console.log("REQ:", req.file);
+
+  const res = cloudinary.uploader.upload(req.file.path);
+
+  res
+    .then((data) => {
+      console.log(data);
+      console.log(data.secure_url);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
   res.status(200).json({
     message: "Амжилттай хадгаллаа.",
-    imgUrl: `${req.protocol}://${req.hostname}:${PORT}/${req.file.path}`,
+    imgUrl: result,
   });
 });
 
