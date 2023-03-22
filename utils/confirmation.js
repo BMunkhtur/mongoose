@@ -8,5 +8,4 @@ const generateCode = () => {
   }
   return token;
 };
-
 module.exports = generateCode;
