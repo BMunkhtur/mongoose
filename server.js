@@ -7,11 +7,11 @@ const cors = require("cors");
 const connectDB = require("./config/mongoDB");
 const logger = require("./middlewares/logger");
 const upload = require("./middlewares/upload");
-
 const cloudinary = require("./utils/cloudinary");
 const error = require("./middlewares/err");
 
-const userRoutes = require("./Routes/userRoutes");
+const userRoutes = require("./routes/userRoutes");
+const categoryRoutes = require("./routes/categoryRoutes");
 
 const PORT = process.env.PORT;
 const dbUrl = process.env.DATABASE_URI;
@@ -26,28 +26,20 @@ app.use(logger);
 app.use("/uploads", express.static("uploads"));
 
 app.use("/users", userRoutes);
+app.use("/categories", categoryRoutes);
 
 app.get("/", async (req, res) => {
   res.json({ message: "Сайн байна уу." });
 });
 
-app.post("/upload", upload.single("image"), (req, res) => {
+app.post("/upload", upload.single("image"), async (req, res) => {
   console.log("REQ:", req.file);
-
-  const res = cloudinary.uploader.upload(req.file.path);
-
-  res
-    .then((data) => {
-      console.log(data);
-      console.log(data.secure_url);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  const result = await cloudinary.uploader.upload(req.file.path);
+  // console.log("CLOUD", result);
 
   res.status(200).json({
     message: "Амжилттай хадгаллаа.",
-    imgUrl: result,
+    imgUrl: result.secure_url,
   });
 });
 
