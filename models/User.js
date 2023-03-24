@@ -10,7 +10,7 @@ const UserSchema = new mongoose.Schema({
     type: String,
     unique: true,
   },
-  password: String,
+  password: { type: String, select: false },
   role: {
     type: String,
     enum: ["User", "Admin"],
@@ -22,5 +22,7 @@ const UserSchema = new mongoose.Schema({
     default: Date.now(),
   },
 });
+
 const user = mongoose.model("User", UserSchema);
+
 module.exports = user;
