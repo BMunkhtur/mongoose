@@ -10,8 +10,9 @@ const upload = require("./middlewares/upload");
 const cloudinary = require("./utils/cloudinary");
 const error = require("./middlewares/err");
 
-const userRoutes = require("./routes/userRoutes");
-const categoryRoutes = require("./routes/categoryRoutes");
+const userRoutes = require("./Routes/userRoutes");
+const categoryRoutes = require("./Routes/categoryRoutes");
+const travelRoutes = require("./Routes/travelRoutes");
 
 const PORT = process.env.PORT;
 const dbUrl = process.env.DATABASE_URI;
@@ -27,6 +28,7 @@ app.use("/uploads", express.static("uploads"));
 
 app.use("/users", userRoutes);
 app.use("/categories", categoryRoutes);
+app.use("/travels", travelRoutes);
 
 app.get("/", async (req, res) => {
   res.json({ message: "Сайн байна уу." });
