@@ -16,20 +16,20 @@ const getAllUsers = async (req, res, next) => {
 };
 
 const createUser = async (req, res, next) => {
-  const { name, email, password, profileImg } = req.body;
-
+  const { name, email, profileImg } = req.body;
+  const salt = await bcrypt.genSalt(10);
+  const password = await bcrypt.hash(req.body.password, salt);
   try {
-    if (!name || !email || !password) {
-      res
-        .status(400)
-        .json({ message: "Нэр, имэйл эсвэл нууц үг байхгүй байна." });
-    }
+    // if (!name || !email || !password) {
+    //   res
+    //     .status(400)
+    //     .json({ message: "Нэр, имэйл эсвэл нууц үг байхгүй байна." });
+    // }
 
     const user = await User.create({
       name,
       email,
       password,
-      profileImg,
     });
     res.status(201).json({ message: "Амжилттай бүртгэгдлээ", user });
   } catch (err) {
@@ -90,8 +90,7 @@ const deleteUser = async (req, res) => {
 };
 
 const login = async (req, res, next) => {
-  console.log(req.body);
-
+  console.log("--------------", req.body);
   try {
     const user = await User.findOne({ email: req.body.email }).select(
       "+password"
@@ -102,6 +101,7 @@ const login = async (req, res, next) => {
     }
 
     const checkPass = bcrypt.compareSync(req.body.password, user.password);
+    console.log(checkPass);
 
     if (!checkPass) {
       res.status(400).json({ message: `Имэйл эсвэл нууц үг буруу байна` });
