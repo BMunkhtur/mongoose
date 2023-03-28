@@ -1,18 +1,22 @@
 const mongoose = require("mongoose");
-
 const travelSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: true,
+    required: [true, "travel ner orul!"],
   },
-  description: {
+  images: {
     type: String,
-    maxlength: [500, "Тайлбар хамгийн ихдээ 500 тэмдэгтээс ихгүй байна."],
+    required: [true, "url oruul!"],
   },
-  travelImg: { type: String },
-  travelPrice: Number,
-  travelDay: Number,
-  travelLocation: String,
+  detail: {
+    type: String,
+    maxlength: [500, "hmgin ihde 500!"],
+  },
+  price: Number,
+  location: {
+    type: String,
+  },
+  day: Number,
   category: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Category",
@@ -20,5 +24,4 @@ const travelSchema = new mongoose.Schema({
 });
 
 const travel = mongoose.model("Travel", travelSchema);
-
 module.exports = travel;
